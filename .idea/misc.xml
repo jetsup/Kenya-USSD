@@ -3,8 +3,15 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.1203125" />
+        <entry key="app/src/main/res/layout/activity_airtel.xml" value="0.2364102564102564" />
+        <entry key="app/src/main/res/layout/activity_faiba.xml" value="0.2364102564102564" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.240625" />
+        <entry key="app/src/main/res/layout/activity_safaricom.xml" value="0.2364102564102564" />
+        <entry key="app/src/main/res/layout/activity_telkom.xml" value="0.2364102564102564" />
+        <entry key="app/src/main/res/layout/card_dialler.xml" value="0.2364102564102564" />
+        <entry key="app/src/main/res/layout/card_main_activity.xml" value="0.2364102564102564" />
         <entry key="app/src/main/res/layout/card_recharge.xml" value="0.240625" />
+        <entry key="app/src/main/res/layout/ussd_list_item_holder.xml" value="0.2364102564102564" />
       </map>
     </option>
   </component>
