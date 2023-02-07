@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="isp_names">
+        <item>Safaricom</item>
+        <item>Airtel</item>
+        <item>Telkom</item>
+        <item>Faiba</item>
+    </string-array>
+    <string-array name="isp_slogans">
+        <item>The Better Option</item>
+        <item>The Smartphone Network</item>
+        <item>Moving Forward</item>
+        <item>I am Future Proof</item>
+    </string-array>
+
+    <!--CodeContent USSD Codes-->
+    <string-array name="safaricom_ussd_code_names">
+        <item>Airtime Balance</item>
+    </string-array>
+
+    <string-array name="safaricom_ussd_codes">
+        <item>*144#</item>
+    </string-array>
+
+    <!--Airtel USSD Codes-->
+    <string-array name="airtel_ussd_code_names">
+        <item>Airtime Balance</item>
+    </string-array>
+
+    <string-array name="airtel_ussd_codes">
+        <item>*131#</item>
+    </string-array>
+
+    <!--Telkom USSD Codes-->
+    <string-array name="telkom_ussd_code_names">
+        <item>Airtime Balance</item>
+    </string-array>
+    <string-array name="telkom_ussd_codes">
+        <item>*131#</item>
+    </string-array>
+
+    <!--Faiba USSD Codes-->
+    <string-array name="faiba_ussd_code_names">
+        <item>Airtime Balance</item>
+    </string-array>
+    <string-array name="faiba_ussd_codes">
+        <item>*111#</item>
+    </string-array>
+
+</resources>

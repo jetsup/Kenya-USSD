@@ -6,7 +6,7 @@
     <string name="faiba_slogan">I am Future Proof</string>
     <string name="safaricom_name">Safaricom</string>
     <string name="airtel_name">Airtel</string>
-    <string name="Telkom_name">Telkom</string>
+    <string name="telkom_name">Telkom</string>
     <string name="sp_name">Service Provider Name</string>
     <string name="ussd_name">Code Name</string>
     <string name="ussd_code">USSD Code</string>
@@ -14,4 +14,5 @@
     <string name="enter_the_digits">Enter the digits</string>
     <string name="dial_text">Dial</string>
     <string name="cancel_text">Cancel</string>
+    <string name="ussd">USSD</string>
 </resources>

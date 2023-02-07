@@ -2,38 +2,35 @@ package com.ngichtech.kenyaussd;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.ngichtech.kenyaussd.adapters.ISPAdapter;
 
 import java.io.File;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
+    public static final String TAG = "My_Tag";
     private final int CALL_PERMISSION_REQUEST = 1;
-    String[] serviceProviders = {"Safaricom", "Telkom", "Airtel", "Faiba"};
-    String[] serviceProviderSlogans = {"The Better Option", "Moving Forward", "The Smartphone Network", "I am Future Proof"};
-    File myDirectory = new File(Environment.getExternalStorageDirectory() + "/Kenya USSD");
-
-    {
-        if (ContextCompat.checkSelfPermission(MainActivity.this,
-                Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(this, "Permission already Granted!", Toast.LENGTH_SHORT).show();
-        } else {
-            requestCallPermission();
-        }
-    }
+    RecyclerView mainRecyclerView;
+    File myDirectory;
 
     private void requestCallPermission() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CALL_PHONE)) {
             new AlertDialog.Builder(this)
                     .setTitle("Allow Call Permission")
-                    .setMessage("This message is needed by this app!!")
+                    .setMessage("This permission is needed by this app.")
                     .setPositiveButton("OK", (dialogInterface, i) ->
                             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.CALL_PHONE},
                                     CALL_PERMISSION_REQUEST))
@@ -57,22 +54,29 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.ussd);
+        // Manage permissions
+        if (ContextCompat.checkSelfPermission(MainActivity.this,
+                Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_DENIED) {
+            requestCallPermission();
+        }
+        // Start initialization here
+        mainRecyclerView = findViewById(R.id.ispRecyclerView);
+        ISPAdapter ispAdapter = new ISPAdapter(MainActivity.this);
+        mainRecyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+        mainRecyclerView.setAdapter(ispAdapter);
 
-        boolean directoryExist = myDirectory.exists();
-        if (directoryExist) {
-            Toast.makeText(this, "Directory already Exists", Toast.LENGTH_SHORT).show();
-        } else {
-            boolean isCreated = myDirectory.mkdir();
-            if (isCreated) {
-                Toast.makeText(this, "Directory created successfully", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "Oops, the directory was not created!", Toast.LENGTH_SHORT).show();
+        // No permission required for this
+        myDirectory = new File(Objects.requireNonNull(getExternalCacheDir().getParentFile()).getPath() + "/Kenya USSD/");
+        if (!myDirectory.exists()) {
+            if (!myDirectory.mkdir()) {
+                Toast.makeText(this, "The folder was not created", Toast.LENGTH_LONG).show();
             }
         }
-
     }
 }
