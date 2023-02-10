@@ -15,4 +15,5 @@
     <string name="dial_text">Dial</string>
     <string name="cancel_text">Cancel</string>
     <string name="ussd">USSD</string>
+    <string name="scan">Scan</string>
 </resources>

@@ -1,9 +1,16 @@
 package com.ngichtech.kenyaussd;
 
+import static com.ngichtech.kenyaussd.custom.ISPConstants.ISP_NAME_AIRTEL;
+import static com.ngichtech.kenyaussd.custom.ISPConstants.ISP_NAME_EXT;
+import static com.ngichtech.kenyaussd.custom.ISPConstants.ISP_NAME_FAIBA;
+import static com.ngichtech.kenyaussd.custom.ISPConstants.ISP_NAME_SAFARICOM;
+import static com.ngichtech.kenyaussd.custom.ISPConstants.ISP_NAME_TELKOM;
+import static com.ngichtech.kenyaussd.custom.ISPConstants.ISP_SLOGAN_EXT;
+
 import android.os.Bundle;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,13 +28,6 @@ public class CodeContent extends AppCompatActivity {
     ISPContentAdapter ispContentAdapter;
     Map<String, String> ispDeco = new HashMap<>();
 
-    {
-        ispDeco.put("CodeContent", "The Better Option");
-        ispDeco.put("Airtel", "The Smartphone Network");
-        ispDeco.put("Telkom", "Moving Forward");
-        ispDeco.put("Faiba", "I am Future Proof");
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,12 +36,27 @@ public class CodeContent extends AppCompatActivity {
         ussdItemRecycler = findViewById(R.id.ussd_items_recycler);
         ussdItemRecycler.setLayoutManager(new LinearLayoutManager(this));
 
-        ispNameReceived = getIntent().getStringExtra("ISP_NAME");
-        ispSloganReceived = getIntent().getStringExtra("ISP_SLOGAN");
-        Objects.requireNonNull(getSupportActionBar()).setTitle(ispNameReceived);
+        ispDeco.put(ISP_NAME_SAFARICOM, "The Better Option");
+        ispDeco.put(ISP_NAME_AIRTEL, "The Smartphone Network");
+        ispDeco.put(ISP_NAME_TELKOM, "Moving Forward");
+        ispDeco.put(ISP_NAME_FAIBA, "I am Future Proof");
+
+        ispNameReceived = getIntent().getStringExtra(ISP_NAME_EXT);
+        ispSloganReceived = getIntent().getStringExtra(ISP_SLOGAN_EXT);
+
+        ActionBar actionBar = Objects.requireNonNull(getSupportActionBar());
+        actionBar.setTitle(ispNameReceived);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
         sloganHeaderText.setText(ispDeco.get(ispNameReceived));
 
         ispContentAdapter = new ISPContentAdapter(CodeContent.this, ispNameReceived.toLowerCase());
         ussdItemRecycler.setAdapter(ispContentAdapter);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return super.onSupportNavigateUp();
     }
 }

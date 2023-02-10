@@ -1,15 +1,18 @@
 package com.ngichtech.kenyaussd;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.camera.core.ExperimentalGetImage;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,6 +23,7 @@ import com.ngichtech.kenyaussd.adapters.ISPAdapter;
 import java.io.File;
 import java.util.Objects;
 
+@ExperimentalGetImage
 public class MainActivity extends AppCompatActivity {
     public static final String TAG = "My_Tag";
     private final int CALL_PERMISSION_REQUEST = 1;
@@ -70,13 +74,23 @@ public class MainActivity extends AppCompatActivity {
         ISPAdapter ispAdapter = new ISPAdapter(MainActivity.this);
         mainRecyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
         mainRecyclerView.setAdapter(ispAdapter);
+        Button btnOpenCam = findViewById(R.id.btnOpenCamera);
+        btnOpenCam.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, ScannerActivity.class)));
 
-        // No permission required for this
         myDirectory = new File(Objects.requireNonNull(getExternalCacheDir().getParentFile()).getPath() + "/Kenya USSD/");
         if (!myDirectory.exists()) {
             if (!myDirectory.mkdir()) {
                 Toast.makeText(this, "The folder was not created", Toast.LENGTH_LONG).show();
             }
         }
+//        TelephonyManager telephoneCount = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
+//        Log.w(TAG, "Operator: " + telephoneCount.getSimOperator());
+//        Log.w(TAG, "OperatorName: " + telephoneCount.getSimOperatorName()); // Safaricom
+//        Log.w(TAG, "PhoneCount: " + telephoneCount.getPhoneCount()); // 3: (voice, sms, data)
+//        Log.w(TAG, "Country: " + telephoneCount.getSimCountryIso());
+//        Log.w(TAG, "Man Code: " + telephoneCount.getManufacturerCode());
+//        Log.w(TAG, "Country: " + telephoneCount.getSimCarrierIdName());
+//        Log.w(TAG, "Country: " + telephoneCount.getSimCarrierId());
+//        Log.w(TAG, "Country: " + telephoneCount.getClass().getName());
     }
 }

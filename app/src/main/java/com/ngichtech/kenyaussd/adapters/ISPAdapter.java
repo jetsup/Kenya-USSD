@@ -1,5 +1,8 @@
 package com.ngichtech.kenyaussd.adapters;
 
+import static com.ngichtech.kenyaussd.custom.ISPConstants.ISP_NAME_EXT;
+import static com.ngichtech.kenyaussd.custom.ISPConstants.ISP_SLOGAN_EXT;
+
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -46,8 +49,8 @@ public class ISPAdapter extends RecyclerView.Adapter<ISPAdapter.MyISPViewHolder>
         holder.ispMainLayout.setOnClickListener(v -> {
             Intent intent = new Intent();
             intent.setClass(context, CodeContent.class);
-            intent.putExtra("ISP_NAME", ispNames.get(position));
-            intent.putExtra("ISP_SLOGAN", ispSlogans.get(position));
+            intent.putExtra(ISP_NAME_EXT, ispNames.get(position));
+            intent.putExtra(ISP_SLOGAN_EXT, ispSlogans.get(position));
             context.startActivity(intent);
         });
     }

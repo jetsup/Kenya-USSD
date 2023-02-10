@@ -1,22 +1,27 @@
 package com.ngichtech.kenyaussd.adapters;
 
 
+import static com.ngichtech.kenyaussd.custom.ISPConstants.ARRAY_TYPE;
+import static com.ngichtech.kenyaussd.custom.ISPConstants.DRAWABLE_TYPE;
+import static com.ngichtech.kenyaussd.custom.ISPConstants.ISP_LOGO_EXT;
+import static com.ngichtech.kenyaussd.custom.ISPConstants.USSD_CODE_EXT;
+import static com.ngichtech.kenyaussd.custom.ISPConstants.USSD_CODE_NAME_EXT;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ngichtech.kenyaussd.MainActivity;
 import com.ngichtech.kenyaussd.R;
 
 import java.util.ArrayList;
@@ -27,7 +32,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ISPContentAdapter extends RecyclerView.Adapter<ISPContentAdapter.ContentViewHolder> {
     List<String> ussdCodeNames;
-    List<String> ussdCode;
+    List<String> ussdCodes;
     Context context;
     Drawable ispLogoIcon;
 
@@ -35,16 +40,14 @@ public class ISPContentAdapter extends RecyclerView.Adapter<ISPContentAdapter.Co
     public ISPContentAdapter(Context context, String isp_name) {
         this.context = context;
         ussdCodeNames = new ArrayList<>();
-        ussdCode = new ArrayList<>();
-        Log.w(MainActivity.TAG, "ISPContentAdapter: "+ isp_name + "_ussd_code_names");
-        int codeNamesIdentifier = context.getResources().getIdentifier(isp_name + "_ussd_code_names", "array", context.getPackageName());
+        ussdCodes = new ArrayList<>();
+        int codeNamesIdentifier = context.getResources().getIdentifier(isp_name + USSD_CODE_NAME_EXT, ARRAY_TYPE, context.getPackageName());
         ussdCodeNames = Arrays.asList(context.getResources().getStringArray(codeNamesIdentifier));
-        Log.w(MainActivity.TAG, "ISPContentAdapter: "+codeNamesIdentifier +" <> "+ Arrays.toString(context.getResources().getStringArray(codeNamesIdentifier)));
 
-        int codeIdentifier = context.getResources().getIdentifier(isp_name + "_ussd_codes", "array", context.getPackageName());
-        ussdCode = Arrays.asList(context.getResources().getStringArray(codeIdentifier));
+        int codeIdentifier = context.getResources().getIdentifier(isp_name + USSD_CODE_EXT, ARRAY_TYPE, context.getPackageName());
+        ussdCodes = Arrays.asList(context.getResources().getStringArray(codeIdentifier));
 
-        int drawableIdentifier = context.getResources().getIdentifier(isp_name + "_logo", "drawable", context.getPackageName());
+        int drawableIdentifier = context.getResources().getIdentifier(isp_name + ISP_LOGO_EXT, DRAWABLE_TYPE, context.getPackageName());
         ispLogoIcon = ResourcesCompat.getDrawable(context.getResources(), drawableIdentifier, null);
     }
 
@@ -58,11 +61,12 @@ public class ISPContentAdapter extends RecyclerView.Adapter<ISPContentAdapter.Co
     @Override
     public void onBindViewHolder(@NonNull ISPContentAdapter.ContentViewHolder holder, int position) {
         holder.ussdCodeName.setText(ussdCodeNames.get(position));
-        holder.ussdCode.setText(ussdCode.get(position));
+        holder.ussdCode.setText(ussdCodes.get(position));
         holder.ispLogoImage.setImageDrawable(ispLogoIcon);
         holder.cardViewLayout.setOnClickListener(v -> {
-//            Toast.makeText(context, "Click", Toast.LENGTH_SHORT).show();
-            Toast.makeText(context, "Clicked index: " + holder.getAdapterPosition(), Toast.LENGTH_SHORT).show();
+            // TODO: Extract this and use it to handle data from user input dialog
+            Uri dialReqUri = Uri.fromParts("tel", ussdCodes.get(position), null);
+            context.startActivity(new Intent(Intent.ACTION_CALL, dialReqUri));
         });
     }
 
