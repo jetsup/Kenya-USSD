@@ -6,8 +6,11 @@ import static com.ngichtech.kenyaussd.custom.ISPConstants.ISP_NAME_FAIBA;
 import static com.ngichtech.kenyaussd.custom.ISPConstants.ISP_NAME_SAFARICOM;
 import static com.ngichtech.kenyaussd.custom.ISPConstants.ISP_NAME_TELKOM;
 import static com.ngichtech.kenyaussd.custom.ISPConstants.ISP_SLOGAN_EXT;
+import static com.ngichtech.kenyaussd.custom.ISPConstants.SIM_CARD_PRESENT;
 
 import android.os.Bundle;
+import android.telephony.SubscriptionInfo;
+import android.util.Log;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
@@ -15,9 +18,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ngichtech.kenyaussd.adapters.ISPAdapter;
 import com.ngichtech.kenyaussd.adapters.ISPContentAdapter;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -27,6 +32,11 @@ public class CodeContent extends AppCompatActivity {
     RecyclerView ussdItemRecycler;
     ISPContentAdapter ispContentAdapter;
     Map<String, String> ispDeco = new HashMap<>();
+    private List<SubscriptionInfo> simInformation;
+    private boolean simPresent = false;
+    private int simSlot = 99;
+    private String simName;
+    private boolean simMatched = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,14 +53,28 @@ public class CodeContent extends AppCompatActivity {
 
         ispNameReceived = getIntent().getStringExtra(ISP_NAME_EXT);
         ispSloganReceived = getIntent().getStringExtra(ISP_SLOGAN_EXT);
-
+        simPresent = getIntent().getBooleanExtra(SIM_CARD_PRESENT, false);
+        if (simPresent) {
+            simInformation = ISPAdapter.simInformation;
+            for (SubscriptionInfo sim : simInformation) {
+                if (sim.getCarrierName().toString().equals(ispNameReceived)) {
+                    simSlot = sim.getSimSlotIndex();
+                    simName = sim.getCarrierName().toString();
+                    simMatched = true;
+                }
+            }
+        }
         ActionBar actionBar = Objects.requireNonNull(getSupportActionBar());
         actionBar.setTitle(ispNameReceived);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         sloganHeaderText.setText(ispDeco.get(ispNameReceived));
-
-        ispContentAdapter = new ISPContentAdapter(CodeContent.this, ispNameReceived.toLowerCase());
+        Log.w("MyTag", "Slot: " + simSlot + " <> " + simMatched + " <> " + ispNameReceived + " <> ");
+        if (simMatched) {
+            ispContentAdapter = new ISPContentAdapter(CodeContent.this, ispNameReceived.toLowerCase(), simSlot);
+        } else {
+            ispContentAdapter = new ISPContentAdapter(CodeContent.this, ispNameReceived.toLowerCase());
+        }
         ussdItemRecycler.setAdapter(ispContentAdapter);
     }
 

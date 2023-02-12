@@ -1,10 +1,19 @@
 package com.ngichtech.kenyaussd;
 
+import static com.ngichtech.kenyaussd.custom.ISPConstants.SELECT_SIM_SLOT;
+import static com.ngichtech.kenyaussd.custom.ISPConstants.SIM_CARD_INFORMATION;
+import static com.ngichtech.kenyaussd.custom.ISPConstants.SIM_CARD_PRESENT;
+
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Size;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,7 +34,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.ngichtech.kenyaussd.custom.ScanAnalyzer;
 
-import java.util.Objects;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 @ExperimentalGetImage
@@ -33,11 +43,19 @@ public class ScannerActivity extends AppCompatActivity {
 
     public static String creditNumber = "";
     public static boolean dataChanged;
+    public static Map<String, Integer> simInfo;
+    public static volatile boolean killScan = false;
+    public static String prefix;
+    public static String rechargeFor;
+    final String TAG = "MyTag";
+    String[] simCards;
+    boolean simPresent;
     EditText recognizedCreditText;
     FloatingActionButton fabCameraFlash;
     PreviewView cameraPreview;
     CameraControl cameraControl;
     private boolean flashOn;
+    private ProcessCameraProvider cameraProvider;
 
     @RequiresApi(api = Build.VERSION_CODES.P)
     @Override
@@ -47,6 +65,20 @@ public class ScannerActivity extends AppCompatActivity {
         recognizedCreditText = findViewById(R.id.recognizedCreditText);
         fabCameraFlash = findViewById(R.id.fabCameraFlash);
         cameraPreview = findViewById(R.id.cameraPreview);
+
+        simCards = getIntent().getStringArrayExtra(SIM_CARD_INFORMATION);
+        simPresent = getIntent().getBooleanExtra(SIM_CARD_PRESENT, false);
+        if (simPresent) {
+            simInfo = new HashMap<>();
+        }
+        for (String simCard : simCards) {
+            simInfo.put(simCard.substring(1), Integer.parseInt(String.valueOf(simCard.charAt(0))));
+        }
+
+        if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            int CAMERA_PERMISSION_CODE = 1;
+            requestPermissions(new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
+        }
 
         fabCameraFlash.setOnClickListener(v -> {
             if (flashOn) {
@@ -72,8 +104,36 @@ public class ScannerActivity extends AppCompatActivity {
                         } catch (NumberFormatException ignore) {
                         }
                     }
-                    runOnUiThread(() -> recognizedCreditText.setText(rectifiedString));
+                    runOnUiThread(() -> {
+                        recognizedCreditText.setText(rectifiedString);
+                        cameraProvider.unbindAll();
+//                        onBackPressed();
+                        Uri dialUri = Uri.parse("tel:" + prefix + creditNumber + Uri.encode("#"));
+                        Intent rechargeIntent = new Intent(Intent.ACTION_CALL);
+                        rechargeIntent.setData(dialUri);
+                        if (ScannerActivity.simInfo.size() > 0) {
+                            Log.w(TAG, "Here " + rechargeFor);
+                            rechargeIntent.putExtra(SELECT_SIM_SLOT, simInfo.get(rechargeFor));
+                        }
+                        Log.w(TAG, "Proxy closed: " + rechargeFor);
+                        Toast.makeText(getBaseContext(), "Recharging " + rechargeFor, Toast.LENGTH_SHORT).show();
+                        MainActivity.context.startActivity(rechargeIntent);
+                    });
+                    Log.w("MyTag", "Finishing...");
+                    startActivity(new Intent(this, MainActivity.class));
+                    this.finish();
+                    Log.w("MyTag", "Finished");
                     dataChanged = false;
+                }
+            }
+        }).start();
+        new Thread(() -> {
+            while (true) {
+                if (killScan) {
+//                    runOnUiThread(() -> cameraProvider.unbindAll());
+                    Log.w("MyTag", "Killing...");
+//                    runOnUiThread(this::onBackPressed);
+                    killScan = false;
                 }
             }
         }).start();
@@ -94,6 +154,7 @@ public class ScannerActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.P)
     private void bindPreview(ProcessCameraProvider cameraProvider) {
+        this.cameraProvider = cameraProvider;
         ScanAnalyzer imageAnalyzer = new ScanAnalyzer(this);
 
         ImageAnalysis imageAnalysis = new ImageAnalysis.Builder()
@@ -108,7 +169,7 @@ public class ScannerActivity extends AppCompatActivity {
         ViewPort viewPort = cameraPreview.getViewPort();
         /* ViewPort, viewPort = new ViewPort.Builder(new Rational( 1, 4), Surface.ROTATION_90).build(); */
 
-        Log.w(MainActivity.TAG, "ViewPort: " + cameraPreview.getScaleType() + " <> " + Objects.requireNonNull(viewPort).getAspectRatio());
+//        Log.w(MainActivity.TAG, "ViewPort: " + cameraPreview.getScaleType() + " <> " + Objects.requireNonNull(viewPort).getAspectRatio());
 
         if (viewPort != null) {
             UseCaseGroup useCaseGroup = new UseCaseGroup.Builder()
@@ -116,8 +177,8 @@ public class ScannerActivity extends AppCompatActivity {
                     .addUseCase(imageAnalysis)
                     .setViewPort(viewPort)
                     .build();
-            cameraProvider.unbindAll();
-            Camera camera = cameraProvider.bindToLifecycle(this, cameraSelector, useCaseGroup);//, imageAnalysis,preview);
+            this.cameraProvider.unbindAll();
+            Camera camera = this.cameraProvider.bindToLifecycle(this, cameraSelector, useCaseGroup);//, imageAnalysis,preview);
             cameraControl = camera.getCameraControl();
             cameraControl.setLinearZoom(0f);
         }

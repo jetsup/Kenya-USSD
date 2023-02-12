@@ -4,6 +4,7 @@ package com.ngichtech.kenyaussd.adapters;
 import static com.ngichtech.kenyaussd.custom.ISPConstants.ARRAY_TYPE;
 import static com.ngichtech.kenyaussd.custom.ISPConstants.DRAWABLE_TYPE;
 import static com.ngichtech.kenyaussd.custom.ISPConstants.ISP_LOGO_EXT;
+import static com.ngichtech.kenyaussd.custom.ISPConstants.SELECT_SIM_SLOT;
 import static com.ngichtech.kenyaussd.custom.ISPConstants.USSD_CODE_EXT;
 import static com.ngichtech.kenyaussd.custom.ISPConstants.USSD_CODE_NAME_EXT;
 
@@ -12,6 +13,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,12 +37,33 @@ public class ISPContentAdapter extends RecyclerView.Adapter<ISPContentAdapter.Co
     List<String> ussdCodes;
     Context context;
     Drawable ispLogoIcon;
+    private String simName;
+    private int simSlot;
+    private boolean simPresent = false;
 
     @SuppressLint("DiscouragedApi")
     public ISPContentAdapter(Context context, String isp_name) {
         this.context = context;
         ussdCodeNames = new ArrayList<>();
         ussdCodes = new ArrayList<>();
+        int codeNamesIdentifier = context.getResources().getIdentifier(isp_name + USSD_CODE_NAME_EXT, ARRAY_TYPE, context.getPackageName());
+        ussdCodeNames = Arrays.asList(context.getResources().getStringArray(codeNamesIdentifier));
+
+        int codeIdentifier = context.getResources().getIdentifier(isp_name + USSD_CODE_EXT, ARRAY_TYPE, context.getPackageName());
+        ussdCodes = Arrays.asList(context.getResources().getStringArray(codeIdentifier));
+
+        int drawableIdentifier = context.getResources().getIdentifier(isp_name + ISP_LOGO_EXT, DRAWABLE_TYPE, context.getPackageName());
+        ispLogoIcon = ResourcesCompat.getDrawable(context.getResources(), drawableIdentifier, null);
+    }
+
+    @SuppressLint("DiscouragedApi")
+    public ISPContentAdapter(Context context, String isp_name, int simSlot) {
+        this.context = context;
+        ussdCodeNames = new ArrayList<>();
+        ussdCodes = new ArrayList<>();
+        this.simName = simName;
+        this.simSlot = simSlot;
+        simPresent = true;
         int codeNamesIdentifier = context.getResources().getIdentifier(isp_name + USSD_CODE_NAME_EXT, ARRAY_TYPE, context.getPackageName());
         ussdCodeNames = Arrays.asList(context.getResources().getStringArray(codeNamesIdentifier));
 
@@ -66,7 +89,12 @@ public class ISPContentAdapter extends RecyclerView.Adapter<ISPContentAdapter.Co
         holder.cardViewLayout.setOnClickListener(v -> {
             // TODO: Extract this and use it to handle data from user input dialog
             Uri dialReqUri = Uri.fromParts("tel", ussdCodes.get(position), null);
-            context.startActivity(new Intent(Intent.ACTION_CALL, dialReqUri));
+            Intent dialIntent = new Intent(Intent.ACTION_CALL, dialReqUri);
+            if (simPresent) {
+                dialIntent.putExtra(SELECT_SIM_SLOT, simSlot);
+                Log.w("MyTag", "onBindViewHolder: " + simSlot);
+            }
+            context.startActivity(dialIntent);
         });
     }
 
