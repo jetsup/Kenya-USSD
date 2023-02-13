@@ -44,7 +44,6 @@ public class ScannerActivity extends AppCompatActivity {
     public static String creditNumber = "";
     public static boolean dataChanged;
     public static Map<String, Integer> simInfo;
-    public static volatile boolean killScan = false;
     public static String prefix;
     public static String rechargeFor;
     final String TAG = "MyTag";
@@ -117,23 +116,13 @@ public class ScannerActivity extends AppCompatActivity {
                         }
                         Log.w(TAG, "Proxy closed: " + rechargeFor);
                         Toast.makeText(getBaseContext(), "Recharging " + rechargeFor, Toast.LENGTH_SHORT).show();
-                        MainActivity.context.startActivity(rechargeIntent);
+                        startActivity(rechargeIntent);
                     });
                     Log.w("MyTag", "Finishing...");
                     startActivity(new Intent(this, MainActivity.class));
                     this.finish();
                     Log.w("MyTag", "Finished");
                     dataChanged = false;
-                }
-            }
-        }).start();
-        new Thread(() -> {
-            while (true) {
-                if (killScan) {
-//                    runOnUiThread(() -> cameraProvider.unbindAll());
-                    Log.w("MyTag", "Killing...");
-//                    runOnUiThread(this::onBackPressed);
-                    killScan = false;
                 }
             }
         }).start();

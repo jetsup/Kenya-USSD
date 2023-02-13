@@ -33,16 +33,14 @@ import java.util.regex.Pattern;
 
 @ExperimentalGetImage
 public class ScanAnalyzer implements ImageAnalysis.Analyzer {
+    private final String TAG = "MyTag";
     TextRecognizer textRecognizer;
     Context context;
     StringBuilder scratchNumber = new StringBuilder();
-    String prefix = "";
-    String rechargeFor = "";
-    Pattern pattern = Pattern.compile("[\\d\\s]+");
+    //    Pattern pattern = Pattern.compile("[\\d\\s]+");
     Matcher matcher;
     boolean canScan = true;
-    private String TAG = "MyTag";
-    private volatile boolean done = false;
+    volatile boolean done = false;
 
     public ScanAnalyzer(Context context) {
         this.context = context;
@@ -80,11 +78,6 @@ public class ScanAnalyzer implements ImageAnalysis.Analyzer {
                             }
 
                             Log.w(MainActivity.TAG, "BlockA: " + Arrays.toString(blockArray));
-
-//                            if (matcher.matches()) {
-//                                ScannerActivity.creditNumber = scratchNumber.toString();
-//                                ScannerActivity.dataChanged = true;
-//                            }
                         } else if (blockArray[0].length() == 4 && blockArrTextM.matches() && blockArray.length >= 3) { // Process Safaricom and Telkom airtime TODO: Faiba?
                             Log.w(TAG, "analyze: " + Arrays.toString(blockArray));
                             scratchNumber = new StringBuilder();
@@ -117,27 +110,6 @@ public class ScanAnalyzer implements ImageAnalysis.Analyzer {
                         ScannerActivity.prefix = TELKOM_RECHARGE_PREFIX;
                         ScannerActivity.rechargeFor = ISP_NAME_TELKOM;
                     }
-
-                    /*Uri dialUri = Uri.parse("tel:" + prefix + scratchNumber + Uri.encode("#"));
-                    Intent rechargeIntent = new Intent(Intent.ACTION_CALL);
-                    rechargeIntent.setData(dialUri);
-                    if (ScannerActivity.simInfo.size() > 0) {
-                        rechargeIntent.putExtra(SELECT_SIM_SLOT, ScannerActivity.simInfo.get(rechargeFor));
-                    }
-                    done = true;
-                    Log.w(TAG, "Proxy closed: " + rechargeFor);
-                    Toast.makeText(context, "Recharging " + rechargeFor, Toast.LENGTH_SHORT).show();
-                    MainActivity.context.startActivity(rechargeIntent);*/
-//                    Uri dialUri = Uri.parse("tel:" + prefix + scratchNumber + Uri.encode("#"));
-//                    Intent rechargeIntent = new Intent(Intent.ACTION_CALL);
-//                    rechargeIntent.setData(dialUri);
-//                    if (ScannerActivity.simInfo.size() > 0) {
-//                        rechargeIntent.putExtra(SELECT_SIM_SLOT, ScannerActivity.simInfo.get(rechargeFor));
-//                    }
-//                    done = true;
-//                    Log.w(TAG, "Proxy closed: " + rechargeFor);
-//                    Toast.makeText(context, "Recharging " + rechargeFor, Toast.LENGTH_SHORT).show();
-//                    MainActivity.context.startActivity(rechargeIntent);
                     imageProxy.close();
                     ScannerActivity.creditNumber = scratchNumber.toString();
                     try {

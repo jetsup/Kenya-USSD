@@ -12,6 +12,10 @@ public class ISPConstants {
     public final static String ISP_NAME_AIRTEL = "Airtel";
     public final static String ISP_NAME_TELKOM = "Telkom";
     public final static String ISP_NAME_FAIBA = "Faiba";
+    public final static String ISP_SAFARICOM_CUSTOMER_CARE = "100";
+    public final static String ISP_AIRTEL_CUSTOMER_CARE = "100";
+    public final static String ISP_TELKOM_CUSTOMER_CARE = "100";
+    public final static String ISP_FAIBA_CUSTOMER_CARE = "100";
     public final static String ARRAY_TYPE = "array";
     public final static String DRAWABLE_TYPE = "drawable";
     public final static String SELECT_SIM_SLOT = "com.android.phone.extra.slot";

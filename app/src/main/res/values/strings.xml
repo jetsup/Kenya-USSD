@@ -16,4 +16,6 @@
     <string name="cancel_text">Cancel</string>
     <string name="ussd">USSD</string>
     <string name="scan">Scan</string>
+    <string name="search">Search</string>
+    <string name="call_provider">Call Provider</string>
 </resources>

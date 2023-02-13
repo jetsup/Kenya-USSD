@@ -34,7 +34,6 @@ import java.util.Objects;
 public class MainActivity extends AppCompatActivity {
     public static final String TAG = "MyTag";
     private static final int PHONE_STATE_PERMISSION = 2;
-    public static Context context;
     private final int CALL_PERMISSION_REQUEST_CODE = 1;
     List<SubscriptionInfo> activeSubscriptionInfoList;
     ISPAdapter ispAdapter;
@@ -77,7 +76,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.ussd);
-        context = this; // TODO:find alternative
         // Manage permissions
         if (ContextCompat.checkSelfPermission(MainActivity.this,
                 Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_DENIED) {

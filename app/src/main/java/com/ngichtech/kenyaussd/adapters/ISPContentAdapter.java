@@ -13,10 +13,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -25,27 +26,59 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ngichtech.kenyaussd.R;
+import com.ngichtech.kenyaussd.models.ISPContent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ISPContentAdapter extends RecyclerView.Adapter<ISPContentAdapter.ContentViewHolder> {
-    List<String> ussdCodeNames;
-    List<String> ussdCodes;
+public class ISPContentAdapter extends RecyclerView.Adapter<ISPContentAdapter.ContentViewHolder> implements Filterable {
+
+    final String TAG = "MyTag";
+    List<ISPContent> ispContentList;
+    List<ISPContent> ispContentListSearchable;
+    private final Filter contentSearchFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<ISPContent> probableContentSearch = new ArrayList<>();
+            if (constraint == null) {
+                probableContentSearch.addAll(ispContentListSearchable);
+            } else {
+                String searchPattern = constraint.toString().toLowerCase().trim();
+                for (ISPContent content : ispContentListSearchable) {
+                    if (content.getUssdCodeName().toLowerCase().contains(searchPattern)) {
+                        probableContentSearch.add(content);
+                    }
+                }
+            }
+            FilterResults searchResult = new FilterResults();
+            searchResult.values = probableContentSearch;
+            return searchResult;
+        }
+
+        @SuppressLint("NotifyDataSetChanged")
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            ispContentList.clear();
+            //noinspection unchecked
+            ispContentList.addAll((Collection<? extends ISPContent>) results.values);
+            notifyDataSetChanged();
+        }
+    };
     Context context;
     Drawable ispLogoIcon;
-    private String simName;
     private int simSlot;
     private boolean simPresent = false;
 
     @SuppressLint("DiscouragedApi")
     public ISPContentAdapter(Context context, String isp_name) {
         this.context = context;
-        ussdCodeNames = new ArrayList<>();
-        ussdCodes = new ArrayList<>();
+        List<String> ussdCodeNames;
+        List<String> ussdCodes;
+        ispContentList = new ArrayList<>();
         int codeNamesIdentifier = context.getResources().getIdentifier(isp_name + USSD_CODE_NAME_EXT, ARRAY_TYPE, context.getPackageName());
         ussdCodeNames = Arrays.asList(context.getResources().getStringArray(codeNamesIdentifier));
 
@@ -54,14 +87,18 @@ public class ISPContentAdapter extends RecyclerView.Adapter<ISPContentAdapter.Co
 
         int drawableIdentifier = context.getResources().getIdentifier(isp_name + ISP_LOGO_EXT, DRAWABLE_TYPE, context.getPackageName());
         ispLogoIcon = ResourcesCompat.getDrawable(context.getResources(), drawableIdentifier, null);
+        for (int i = 0; i < ussdCodeNames.size(); i++) {
+            ispContentList.add(new ISPContent(ussdCodeNames.get(i), ussdCodes.get(i)));
+        }
+        ispContentListSearchable = new ArrayList<>(ispContentList);
     }
 
     @SuppressLint("DiscouragedApi")
     public ISPContentAdapter(Context context, String isp_name, int simSlot) {
+        List<String> ussdCodeNames;
+        List<String> ussdCodes;
         this.context = context;
-        ussdCodeNames = new ArrayList<>();
-        ussdCodes = new ArrayList<>();
-        this.simName = simName;
+        ispContentList = new ArrayList<>();
         this.simSlot = simSlot;
         simPresent = true;
         int codeNamesIdentifier = context.getResources().getIdentifier(isp_name + USSD_CODE_NAME_EXT, ARRAY_TYPE, context.getPackageName());
@@ -72,6 +109,10 @@ public class ISPContentAdapter extends RecyclerView.Adapter<ISPContentAdapter.Co
 
         int drawableIdentifier = context.getResources().getIdentifier(isp_name + ISP_LOGO_EXT, DRAWABLE_TYPE, context.getPackageName());
         ispLogoIcon = ResourcesCompat.getDrawable(context.getResources(), drawableIdentifier, null);
+        for (int i = 0; i < ussdCodeNames.size(); i++) {
+            ispContentList.add(new ISPContent(ussdCodeNames.get(i), ussdCodes.get(i)));
+        }
+        ispContentListSearchable = new ArrayList<>(ispContentList);
     }
 
     @NonNull
@@ -83,16 +124,15 @@ public class ISPContentAdapter extends RecyclerView.Adapter<ISPContentAdapter.Co
 
     @Override
     public void onBindViewHolder(@NonNull ISPContentAdapter.ContentViewHolder holder, int position) {
-        holder.ussdCodeName.setText(ussdCodeNames.get(position));
-        holder.ussdCode.setText(ussdCodes.get(position));
+        holder.ussdCodeName.setText(ispContentList.get(position).getUssdCodeName());
+        holder.ussdCode.setText(ispContentList.get(position).getUssdCode());
         holder.ispLogoImage.setImageDrawable(ispLogoIcon);
         holder.cardViewLayout.setOnClickListener(v -> {
             // TODO: Extract this and use it to handle data from user input dialog
-            Uri dialReqUri = Uri.fromParts("tel", ussdCodes.get(position), null);
+            Uri dialReqUri = Uri.fromParts("tel", ispContentList.get(position).getUssdCode(), null);
             Intent dialIntent = new Intent(Intent.ACTION_CALL, dialReqUri);
             if (simPresent) {
                 dialIntent.putExtra(SELECT_SIM_SLOT, simSlot);
-                Log.w("MyTag", "onBindViewHolder: " + simSlot);
             }
             context.startActivity(dialIntent);
         });
@@ -100,7 +140,12 @@ public class ISPContentAdapter extends RecyclerView.Adapter<ISPContentAdapter.Co
 
     @Override
     public int getItemCount() {
-        return ussdCodeNames.size();
+        return ispContentList.size();
+    }
+
+    @Override
+    public Filter getFilter() {
+        return contentSearchFilter;
     }
 
     public static class ContentViewHolder extends RecyclerView.ViewHolder {
