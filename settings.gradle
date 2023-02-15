@@ -6,5 +6,5 @@ dependencyResolutionManagement {
         maven { url "https://jitpack.io" }
     }
 }
-rootProject.name = "Kenya USSD"
+rootProject.name = "USSD n Recharge KE"
 include ':app'

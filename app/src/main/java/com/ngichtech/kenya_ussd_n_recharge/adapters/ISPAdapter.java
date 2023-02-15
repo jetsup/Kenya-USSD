@@ -1,8 +1,8 @@
-package com.ngichtech.kenyaussd.adapters;
+package com.ngichtech.kenya_ussd_n_recharge.adapters;
 
-import static com.ngichtech.kenyaussd.custom.ISPConstants.ISP_NAME_EXT;
-import static com.ngichtech.kenyaussd.custom.ISPConstants.ISP_SLOGAN_EXT;
-import static com.ngichtech.kenyaussd.custom.ISPConstants.SIM_CARD_PRESENT;
+import static com.ngichtech.kenya_ussd_n_recharge.custom.ISPConstants.ISP_NAME_EXT;
+import static com.ngichtech.kenya_ussd_n_recharge.custom.ISPConstants.ISP_SLOGAN_EXT;
+import static com.ngichtech.kenya_ussd_n_recharge.custom.ISPConstants.SIM_CARD_PRESENT;
 
 import android.content.Context;
 import android.content.Intent;
@@ -19,9 +19,9 @@ import androidx.cardview.widget.CardView;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ngichtech.kenyaussd.CodeContent;
-import com.ngichtech.kenyaussd.R;
-import com.ngichtech.kenyaussd.models.ISP;
+import com.ngichtech.kenya_ussd_n_recharge.CodeContent;
+import com.ngichtech.kenya_ussd_n_recharge.R;
+import com.ngichtech.kenya_ussd_n_recharge.models.ISP;
 
 import java.util.ArrayList;
 import java.util.Arrays;

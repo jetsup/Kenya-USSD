@@ -1,19 +1,20 @@
-package com.ngichtech.kenyaussd;
+package com.ngichtech.kenya_ussd_n_recharge;
 
-import static com.ngichtech.kenyaussd.custom.ISPConstants.ISP_AIRTEL_CUSTOMER_CARE;
-import static com.ngichtech.kenyaussd.custom.ISPConstants.ISP_FAIBA_CUSTOMER_CARE;
-import static com.ngichtech.kenyaussd.custom.ISPConstants.ISP_NAME_AIRTEL;
-import static com.ngichtech.kenyaussd.custom.ISPConstants.ISP_NAME_EXT;
-import static com.ngichtech.kenyaussd.custom.ISPConstants.ISP_NAME_FAIBA;
-import static com.ngichtech.kenyaussd.custom.ISPConstants.ISP_NAME_SAFARICOM;
-import static com.ngichtech.kenyaussd.custom.ISPConstants.ISP_NAME_TELKOM;
-import static com.ngichtech.kenyaussd.custom.ISPConstants.ISP_SAFARICOM_CUSTOMER_CARE;
-import static com.ngichtech.kenyaussd.custom.ISPConstants.ISP_SLOGAN_EXT;
-import static com.ngichtech.kenyaussd.custom.ISPConstants.ISP_TELKOM_CUSTOMER_CARE;
-import static com.ngichtech.kenyaussd.custom.ISPConstants.SELECT_SIM_SLOT;
-import static com.ngichtech.kenyaussd.custom.ISPConstants.SIM_CARD_PRESENT;
+import static com.ngichtech.kenya_ussd_n_recharge.custom.ISPConstants.ISP_AIRTEL_CUSTOMER_CARE;
+import static com.ngichtech.kenya_ussd_n_recharge.custom.ISPConstants.ISP_FAIBA_CUSTOMER_CARE;
+import static com.ngichtech.kenya_ussd_n_recharge.custom.ISPConstants.ISP_NAME_AIRTEL;
+import static com.ngichtech.kenya_ussd_n_recharge.custom.ISPConstants.ISP_NAME_EXT;
+import static com.ngichtech.kenya_ussd_n_recharge.custom.ISPConstants.ISP_NAME_FAIBA;
+import static com.ngichtech.kenya_ussd_n_recharge.custom.ISPConstants.ISP_NAME_SAFARICOM;
+import static com.ngichtech.kenya_ussd_n_recharge.custom.ISPConstants.ISP_NAME_TELKOM;
+import static com.ngichtech.kenya_ussd_n_recharge.custom.ISPConstants.ISP_SAFARICOM_CUSTOMER_CARE;
+import static com.ngichtech.kenya_ussd_n_recharge.custom.ISPConstants.ISP_SLOGAN_EXT;
+import static com.ngichtech.kenya_ussd_n_recharge.custom.ISPConstants.ISP_TELKOM_CUSTOMER_CARE;
+import static com.ngichtech.kenya_ussd_n_recharge.custom.ISPConstants.SELECT_SIM_SLOT;
+import static com.ngichtech.kenya_ussd_n_recharge.custom.ISPConstants.SIM_CARD_PRESENT;
 
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.telephony.SubscriptionInfo;
@@ -21,7 +22,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.inputmethod.EditorInfo;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -31,8 +31,8 @@ import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ngichtech.kenyaussd.adapters.ISPAdapter;
-import com.ngichtech.kenyaussd.adapters.ISPContentAdapter;
+import com.ngichtech.kenya_ussd_n_recharge.adapters.ISPAdapter;
+import com.ngichtech.kenya_ussd_n_recharge.adapters.ISPContentAdapter;
 
 import java.util.HashMap;
 import java.util.List;
@@ -42,7 +42,6 @@ import java.util.Objects;
 public class CodeContent extends AppCompatActivity {
     final String TAG = "MyTag";
     String ispNameReceived, ispSloganReceived;
-    TextView sloganHeaderText;
     RecyclerView ussdItemRecycler;
     ISPContentAdapter ispContentAdapter;
     Map<String, String> ispDeco = new HashMap<>();
@@ -84,12 +83,14 @@ public class CodeContent extends AppCompatActivity {
                 }
             }
         }
+
         ActionBar actionBar = Objects.requireNonNull(getSupportActionBar());
         actionBar.setTitle(ispNameReceived);
         actionBar.setSubtitle(ispSloganReceived);
         actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.faiba_green, null)));
 
-        sloganHeaderText.setText(ispDeco.get(ispNameReceived));
+
         Log.w("MyTag", "Slot: " + simSlot + " <> " + simMatched + " <> " + ispNameReceived + " <> ");
         if (simMatched) {
             ispContentAdapter = new ISPContentAdapter(CodeContent.this, ispNameReceived.toLowerCase(), simSlot);

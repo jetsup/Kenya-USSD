@@ -1,4 +1,4 @@
-package com.ngichtech.kenyaussd.tools;
+package com.ngichtech.kenya_ussd_n_recharge.tools;
 
 import android.graphics.Matrix;
 import android.util.Size;

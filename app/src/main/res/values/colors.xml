@@ -9,4 +9,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="black_white">#000000</color>
     <color name="grey">#A0A0A0</color>
+    <color name="safaricom_green">#159F4A</color>
+    <color name="airtel_red">#EC1A23</color>
+    <color name="telkom_blue">#0FAACA</color>
+    <color name="faiba_green">#73AA4E</color>
 </resources>

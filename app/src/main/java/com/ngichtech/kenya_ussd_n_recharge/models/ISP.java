@@ -1,4 +1,4 @@
-package com.ngichtech.kenyaussd.models;
+package com.ngichtech.kenya_ussd_n_recharge.models;
 
 public class ISP {
     String ISPName;

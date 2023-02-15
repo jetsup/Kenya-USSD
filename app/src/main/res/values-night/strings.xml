@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Kenya USSD</string>
+    <string name="app_name">USSD Recharge KE</string>
     <string name="safaricom_slogan">The Better Option</string>
     <string name="telkom_slogan">Moving Forward</string>
     <string name="airtel_slogan">The Smartphone Network</string>
@@ -18,4 +18,5 @@
     <string name="scan">Scan</string>
     <string name="search">Search</string>
     <string name="call_provider">Call Provider</string>
+    <string name="settings">Settings</string>
 </resources>

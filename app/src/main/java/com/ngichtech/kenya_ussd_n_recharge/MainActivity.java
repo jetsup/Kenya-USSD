@@ -1,7 +1,7 @@
-package com.ngichtech.kenyaussd;
+package com.ngichtech.kenya_ussd_n_recharge;
 
-import static com.ngichtech.kenyaussd.custom.ISPConstants.SIM_CARD_INFORMATION;
-import static com.ngichtech.kenyaussd.custom.ISPConstants.SIM_CARD_PRESENT;
+import static com.ngichtech.kenya_ussd_n_recharge.custom.ISPConstants.SIM_CARD_INFORMATION;
+import static com.ngichtech.kenya_ussd_n_recharge.custom.ISPConstants.SIM_CARD_PRESENT;
 
 import android.Manifest;
 import android.content.Context;
@@ -11,6 +11,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -24,7 +26,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ngichtech.kenyaussd.adapters.ISPAdapter;
+import com.ngichtech.kenya_ussd_n_recharge.adapters.ISPAdapter;
 
 import java.io.File;
 import java.util.List;
@@ -127,6 +129,22 @@ public class MainActivity extends AppCompatActivity {
             if (!myDirectory.mkdir()) {
                 Toast.makeText(this, "The folder was not created", Toast.LENGTH_LONG).show();
             }
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu_settings, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.settings) {
+            startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
     }
 }

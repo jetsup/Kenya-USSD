@@ -1,8 +1,8 @@
-package com.ngichtech.kenyaussd;
+package com.ngichtech.kenya_ussd_n_recharge;
 
-import static com.ngichtech.kenyaussd.custom.ISPConstants.SELECT_SIM_SLOT;
-import static com.ngichtech.kenyaussd.custom.ISPConstants.SIM_CARD_INFORMATION;
-import static com.ngichtech.kenyaussd.custom.ISPConstants.SIM_CARD_PRESENT;
+import static com.ngichtech.kenya_ussd_n_recharge.custom.ISPConstants.SELECT_SIM_SLOT;
+import static com.ngichtech.kenya_ussd_n_recharge.custom.ISPConstants.SIM_CARD_INFORMATION;
+import static com.ngichtech.kenya_ussd_n_recharge.custom.ISPConstants.SIM_CARD_PRESENT;
 
 import android.Manifest;
 import android.content.Intent;
@@ -32,7 +32,7 @@ import androidx.core.content.res.ResourcesCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.common.util.concurrent.ListenableFuture;
-import com.ngichtech.kenyaussd.custom.ScanAnalyzer;
+import com.ngichtech.kenya_ussd_n_recharge.custom.ScanAnalyzer;
 
 import java.util.HashMap;
 import java.util.Map;

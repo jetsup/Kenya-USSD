@@ -1,12 +1,12 @@
-package com.ngichtech.kenyaussd.adapters;
+package com.ngichtech.kenya_ussd_n_recharge.adapters;
 
 
-import static com.ngichtech.kenyaussd.custom.ISPConstants.ARRAY_TYPE;
-import static com.ngichtech.kenyaussd.custom.ISPConstants.DRAWABLE_TYPE;
-import static com.ngichtech.kenyaussd.custom.ISPConstants.ISP_LOGO_EXT;
-import static com.ngichtech.kenyaussd.custom.ISPConstants.SELECT_SIM_SLOT;
-import static com.ngichtech.kenyaussd.custom.ISPConstants.USSD_CODE_EXT;
-import static com.ngichtech.kenyaussd.custom.ISPConstants.USSD_CODE_NAME_EXT;
+import static com.ngichtech.kenya_ussd_n_recharge.custom.ISPConstants.ARRAY_TYPE;
+import static com.ngichtech.kenya_ussd_n_recharge.custom.ISPConstants.DRAWABLE_TYPE;
+import static com.ngichtech.kenya_ussd_n_recharge.custom.ISPConstants.ISP_LOGO_EXT;
+import static com.ngichtech.kenya_ussd_n_recharge.custom.ISPConstants.SELECT_SIM_SLOT;
+import static com.ngichtech.kenya_ussd_n_recharge.custom.ISPConstants.USSD_CODE_EXT;
+import static com.ngichtech.kenya_ussd_n_recharge.custom.ISPConstants.USSD_CODE_NAME_EXT;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -25,8 +25,8 @@ import androidx.cardview.widget.CardView;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ngichtech.kenyaussd.R;
-import com.ngichtech.kenyaussd.models.ISPContent;
+import com.ngichtech.kenya_ussd_n_recharge.R;
+import com.ngichtech.kenya_ussd_n_recharge.models.ISPContent;
 
 import java.util.ArrayList;
 import java.util.Arrays;

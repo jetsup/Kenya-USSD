@@ -1,11 +1,11 @@
-package com.ngichtech.kenyaussd.custom;
+package com.ngichtech.kenya_ussd_n_recharge.custom;
 
-import static com.ngichtech.kenyaussd.custom.ISPConstants.ISP_NAME_SAFARICOM;
-import static com.ngichtech.kenyaussd.custom.ISPConstants.ISP_NAME_TELKOM;
-import static com.ngichtech.kenyaussd.custom.ISPConstants.SAFARICOM_CREDIT_LENGTH;
-import static com.ngichtech.kenyaussd.custom.ISPConstants.SAFARICOM_RECHARGE_PREFIX;
-import static com.ngichtech.kenyaussd.custom.ISPConstants.TELKOM_CREDIT_LENGTH;
-import static com.ngichtech.kenyaussd.custom.ISPConstants.TELKOM_RECHARGE_PREFIX;
+import static com.ngichtech.kenya_ussd_n_recharge.custom.ISPConstants.ISP_NAME_SAFARICOM;
+import static com.ngichtech.kenya_ussd_n_recharge.custom.ISPConstants.ISP_NAME_TELKOM;
+import static com.ngichtech.kenya_ussd_n_recharge.custom.ISPConstants.SAFARICOM_CREDIT_LENGTH;
+import static com.ngichtech.kenya_ussd_n_recharge.custom.ISPConstants.SAFARICOM_RECHARGE_PREFIX;
+import static com.ngichtech.kenya_ussd_n_recharge.custom.ISPConstants.TELKOM_CREDIT_LENGTH;
+import static com.ngichtech.kenya_ussd_n_recharge.custom.ISPConstants.TELKOM_RECHARGE_PREFIX;
 
 import android.content.Context;
 import android.media.Image;
@@ -22,8 +22,8 @@ import com.google.mlkit.vision.text.Text;
 import com.google.mlkit.vision.text.TextRecognition;
 import com.google.mlkit.vision.text.TextRecognizer;
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions;
-import com.ngichtech.kenyaussd.MainActivity;
-import com.ngichtech.kenyaussd.ScannerActivity;
+import com.ngichtech.kenya_ussd_n_recharge.MainActivity;
+import com.ngichtech.kenya_ussd_n_recharge.ScannerActivity;
 
 import java.util.Arrays;
 import java.util.Objects;

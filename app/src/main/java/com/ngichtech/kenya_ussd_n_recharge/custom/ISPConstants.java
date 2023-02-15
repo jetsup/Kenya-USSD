@@ -1,4 +1,4 @@
-package com.ngichtech.kenyaussd.custom;
+package com.ngichtech.kenya_ussd_n_recharge.custom;
 
 public class ISPConstants {
     public final static String USSD_CODE_NAME_EXT = "_ussd_code_names";
